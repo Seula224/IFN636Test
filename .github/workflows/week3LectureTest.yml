@@ -34,3 +34,10 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+
+      # Add the Crud Test (v1) 
+      - name: Run Automated Crud Tests
+        run: |
+          cd frontend
+          npm test -- --watchAll=false
+
