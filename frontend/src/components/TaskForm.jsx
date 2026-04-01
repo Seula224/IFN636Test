@@ -1,71 +1,69 @@
-import { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
+import React, { useState, useEffect } from 'react';
 import axiosInstance from '../axiosConfig';
 
-const TaskForm = ({ tasks, setTasks, editingTask, setEditingTask }) => {
-  const { user } = useAuth();
-  const [formData, setFormData] = useState({ title: '', description: '', deadline: '' });
+const TaskForm = ({ onTaskAdded, editingTask, setEditingTask }) => {
+  const [topic, setTopic] = useState('');
+  const [description, setDescription] = useState('');
 
+  // If we are editing, fill the form with the existing debate data
   useEffect(() => {
     if (editingTask) {
-      setFormData({
-        title: editingTask.title,
-        description: editingTask.description,
-        deadline: editingTask.deadline,
-      });
-    } else {
-      setFormData({ title: '', description: '', deadline: '' });
+      setTopic(editingTask.title);
+      setDescription(editingTask.description);
     }
   }, [editingTask]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const payload = { title: topic, description };
+      
       if (editingTask) {
-        const response = await axiosInstance.put(`/api/tasks/${editingTask._id}`, formData, {
-          headers: { Authorization: `Bearer ${user.token}` },
-        });
-        setTasks(tasks.map((task) => (task._id === response.data._id ? response.data : task)));
+        await axiosInstance.put(`/api/tasks/${editingTask._id}`, payload);
+        setEditingTask(null);
       } else {
-        const response = await axiosInstance.post('/api/tasks', formData, {
-          headers: { Authorization: `Bearer ${user.token}` },
-        });
-        setTasks([...tasks, response.data]);
+        await axiosInstance.post('/api/tasks', payload);
       }
-      setEditingTask(null);
-      setFormData({ title: '', description: '', deadline: '' });
+
+      onTaskAdded();
+      setTopic('');
+      setDescription('');
     } catch (error) {
-      alert('Failed to save task.');
+      alert("Failed to save debate. Check backend!");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 shadow-md rounded mb-6">
-      <h1 className="text-2xl font-bold mb-4">{editingTask ? 'Edit Task' : 'Add Task'}</h1>
-      <input
-        type="text"
-        placeholder="Title"
-        value={formData.title}
-        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-        className="w-full mb-4 p-2 border rounded"
-      />
-      <input
-        type="text"
-        placeholder="Description"
-        value={formData.description}
-        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-        className="w-full mb-4 p-2 border rounded"
-      />
-      <input
-        type="date"
-        value={formData.deadline}
-        onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-        className="w-full mb-4 p-2 border rounded"
-      />
-      <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded">
-        {editingTask ? 'Update Task' : 'Add Task'}
-      </button>
-    </form>
+    <div className="bg-slate-100 p-8 rounded-2xl shadow-inner border border-slate-200 mb-10">
+      <h2 className="text-slate-800 text-2xl font-bold mb-6 tracking-tight">
+        {editingTask ? "📝 Edit Debate" : "🎙️ Start a New Debate"}
+      </h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input 
+          type="text" 
+          placeholder="Proposed Topic..." 
+          className="w-full p-4 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-slate-400 focus:outline-none transition"
+          value={topic}
+          onChange={(e) => setTopic(e.target.value)}
+        />
+        <textarea 
+          placeholder="Opening Argument..." 
+          className="w-full p-4 bg-white border border-slate-300 rounded-xl h-32 focus:ring-2 focus:ring-slate-400 focus:outline-none transition"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <div className="flex gap-2">
+          <button type="submit" className="flex-1 bg-slate-800 text-white p-4 rounded-xl font-bold hover:bg-slate-700 transition-all shadow-lg">
+            {editingTask ? "Update Debate" : "Publish Debate"}
+          </button>
+          {editingTask && (
+            <button onClick={() => setEditingTask(null)} className="bg-slate-300 text-slate-700 p-4 rounded-xl font-bold hover:bg-slate-400 transition">
+              Cancel
+            </button>
+          )}
+        </div>
+      </form>
+    </div>
   );
 };
 

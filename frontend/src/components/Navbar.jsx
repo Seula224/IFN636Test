@@ -37,7 +37,6 @@ const Navbar = () => {
             <Link to="/login" className="mr-6 hover:text-gray-400 transition">Login</Link>
             <Link
               to="/register"
-              /* Changed green-500 to a dark grey (zinc-700) */
               className="bg-zinc-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-zinc-600 transition shadow-sm"
             >
               Register
