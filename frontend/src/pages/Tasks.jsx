@@ -35,7 +35,8 @@ const Tasks = () => {
       <TaskList 
         tasks={tasks} 
         setTasks={setTasks} 
-        setEditingTask={setEditingTask} 
+        setEditingTask={setEditingTask}
+        userId={loggedInUserId} 
       />
     </div>
   );

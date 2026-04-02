@@ -1,7 +1,8 @@
 import React from 'react';
 import axiosInstance from '../axiosConfig';
 
-const TaskList = ({ tasks, setTasks, setEditingTask }) => {
+// Added 'userId' to the props list here
+const TaskList = ({ tasks, setTasks, setEditingTask, userId }) => {
 
   const handleDelete = async (taskId) => {
     if (!window.confirm("Are you sure you want to delete this debate?")) return;
@@ -27,20 +28,23 @@ const TaskList = ({ tasks, setTasks, setEditingTask }) => {
               <p className="text-slate-600 mt-2 leading-relaxed">{task.description}</p>
             </div>
             
-            <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
-              <button
-                onClick={() => setEditingTask(task)}
-                className="bg-slate-100 text-slate-600 p-2 px-4 rounded-lg hover:bg-slate-200 transition font-semibold text-sm"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => handleDelete(task._id)}
-                className="bg-slate-800 text-white p-2 px-4 rounded-lg hover:bg-red-600 transition font-semibold text-sm"
-              >
-                Delete
-              </button>
-            </div>
+            {/* Only show these buttons if the current user owns the task */}
+            {task.userId === userId && (
+              <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button
+                  onClick={() => setEditingTask(task)}
+                  className="bg-slate-100 text-slate-600 p-2 px-4 rounded-lg hover:bg-slate-200 transition font-semibold text-sm"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(task._id)}
+                  className="bg-slate-800 text-white p-2 px-4 rounded-lg hover:bg-red-600 transition font-semibold text-sm"
+                >
+                  Delete
+                </button>
+              </div>
+            )}
           </div>
           <div className="mt-4 pt-4 border-t border-slate-50 flex items-center text-xs text-slate-400 uppercase tracking-widest font-bold">
             Status: Active Discussion
