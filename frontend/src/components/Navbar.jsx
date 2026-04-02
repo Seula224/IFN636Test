@@ -22,7 +22,7 @@ const Navbar = () => {
         {user ? (
           <>
             {/* Renamed Tasks to Debates and added hover effect */}
-            <Link to="/tasks" className="mr-6 hover:text-gray-400 transition">Debates</Link>
+            <Link to="/dashboard" className="mr-6 hover:text-gray-400 transition">Debates</Link>
             <Link to="/profile" className="mr-6 hover:text-gray-400 transition">Profile</Link>
             <button
               onClick={handleLogout}
