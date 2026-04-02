@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // 1. Added Link here
 import axiosInstance from '../axiosConfig';
 
 const Login = () => {
@@ -18,7 +18,7 @@ const Login = () => {
       localStorage.setItem('token', response.data.token); 
       
       login(response.data);
-      navigate('/tasks');
+      navigate('/dashboard');
     } catch (error) {
       console.error("Login Error:", error);
       alert('Login failed. Please check your credentials.');
@@ -58,8 +58,15 @@ const Login = () => {
           </button>
         </div>
         
+        {/* 2. Swapped <span> for <Link> below */}
         <p className="mt-6 text-center text-sm text-slate-500">
-          Don't have an account? <span className="text-slate-800 font-semibold cursor-pointer hover:underline">Register</span>
+          Don't have an account?{' '}
+          <Link 
+            to="/register" 
+            className="text-slate-800 font-semibold hover:underline"
+          >
+            Register
+          </Link>
         </p>
       </form>
     </div>
