@@ -1,24 +1,39 @@
-Run-Tests:
-    needs: Build-Application
-    runs-on: ubuntu-latest
+name: Backend CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  test-and-deploy:
+    # This tells GitHub to run the code on your AWS machine!
+    runs-on: self-hosted
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      - name: Install Backend Deps
-        run: cd backend && npm install
+      - name: Install Backend Dependencies
+        working-directory: ./backend
+        run: npm install
 
-      - name: Create .env file for Tests
+      - name: Create .env File from PROD Secret
         run: |
           cd backend
-          # This creates the file and injects the secrets directly
-          echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-          echo "PORT=5001" >> .env
+          # This takes your 'PROD' secret and writes it into a real .env file
+          echo "${{ secrets.PROD }}" > .env
 
       - name: Run All 31 Tests
-        run: cd backend && npm test
+        working-directory: ./backend
+        run: npm test
+
+      - name: Restart Services with PM2
+        # This keeps the app running on your AWS server after the tests pass
+        run: |
+          pm2 restart all || pm2 start backend/server.js --name "backend"
