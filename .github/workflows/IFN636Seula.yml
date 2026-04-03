@@ -8,7 +8,7 @@ on:
 jobs:
   # JOB 1: The Build Box
   Build-Application:
-    runs-on: self-hosted  # Changed to self-hosted to match your setup
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
 
@@ -27,7 +27,7 @@ jobs:
           cd frontend
           npm run build
 
-  # JOB 2: The Test & Deploy Box (Waits for Build)
+  # JOB 2: The Test & Deploy Box
   Run-Tests-and-Deploy:
     needs: Build-Application
     runs-on: self-hosted
@@ -39,10 +39,15 @@ jobs:
         with:
           node-version: '18'
 
+      # ⭐ THE FIX: Re-install backend tools so they are ready for testing
+      - name: Install Backend Tools
+        run: |
+          cd backend
+          npm install
+
       - name: Create .env from PROD Secret
         run: |
           cd backend
-          # This uses the PROD secret you just successfully tested
           echo "${{ secrets.PROD }}" > .env
 
       - name: Run Backend Integration Tests
@@ -51,6 +56,5 @@ jobs:
           npm test
 
       - name: Deploy with PM2
-        # This keeps your app live on AWS after the tests pass
         run: |
           pm2 restart all || pm2 start backend/server.js --name "backend"
