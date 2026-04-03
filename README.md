@@ -6,10 +6,12 @@
 * Login
 * Logout
 * Update profile
-* Add tasks
-* View tasks
-* Update tasks
-* Delete tasks
+* Add Topic
+* View Topic
+* Update Topic
+* Delete Topic
+
+* editing topics only possible by the owner of topics.
 
 **This **app**lication** is**almost **a** precompiled** app**. However, students will develop some features,**such as adding tasks, viewing tasks, updating tasks, and **deleting** tasks**. **Students** will interact with GitHub when they develop the features.**
 
@@ -24,3 +26,11 @@
 * **GitHub Account** [[https://github.com/signup?source=login](https://github.com/signup?source=login)]** **
 
 ---
+
+**fundenmental folders/files explanation.**
+
+* .env                                - checking mongodb
+* /backend/test/                      - test files (for local)
+* /backend/controllers                - authentication/task control
+* /frontend $ Readme.md               - should be deleted/modified
+* /frontend/src $ axioConfig.jsx      - Ip address change here
