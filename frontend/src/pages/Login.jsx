@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Link, useNavigate } from 'react-router-dom'; // 1. Added Link here
+import { Link, useNavigate } from 'react-router-dom';
 import axiosInstance from '../axiosConfig';
 
 const Login = () => {
@@ -11,23 +11,48 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // 1. Send Login Request
       const response = await axiosInstance.post('/api/auth/login', formData);
-      
-      /* 🛡️ THE SAFETY SAVE: 
-         Ensure the token is stored exactly as 'token' so axiosConfig can find it. */
-      localStorage.setItem('token', response.data.token); 
-      
+      console.log("Full Login Response:", response.data); // Helpful for debugging
+
+      // 2. Save the Token
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+      }
+
+      /* 🛡️ THE SAFETY ID SEARCH:
+         We check every possible place the ID could be hiding so it's never 'null'. */
+      const retrievedId = 
+        response.data.user?._id || 
+        response.data.userId || 
+        response.data.id || 
+        response.data.user?.id;
+
+      if (retrievedId) {
+        localStorage.setItem('userId', retrievedId);
+        console.log("Identity Confirmed! Saved User ID:", retrievedId);
+      } else {
+        console.warn("Backend didn't send an ID in the usual spots. Check console!");
+      }
+
+      // 3. Update Auth Context and Redirect
       login(response.data);
       navigate('/dashboard');
+
     } catch (error) {
-      console.error("Login Error:", error);
-      alert('Login failed. Please check your credentials.');
+      console.error("Login Error Details:", error.response?.data || error.message);
+      
+      // If the error is a 401, it's usually a wrong password.
+      if (error.response?.status === 401) {
+        alert('Invalid email or password. Please try again.');
+      } else {
+        alert('Login failed. The server might be having a moment.');
+      }
     }
   };
 
   return (
     <div className="max-w-md mx-auto mt-20 p-4">
-      {/* Updated to Slate/Grey monotone theme */}
       <form onSubmit={handleSubmit} className="bg-slate-50 p-8 shadow-xl rounded-xl border border-slate-200">
         <h1 className="text-3xl font-bold mb-6 text-center text-slate-800 tracking-tight">
           Debate Login
@@ -37,6 +62,7 @@ const Login = () => {
           <input
             type="email"
             placeholder="Email Address"
+            required
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-400 focus:outline-none transition"
@@ -45,6 +71,7 @@ const Login = () => {
           <input
             type="password"
             placeholder="Password"
+            required
             value={formData.password}
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-400 focus:outline-none transition"
@@ -58,7 +85,6 @@ const Login = () => {
           </button>
         </div>
         
-        {/* 2. Swapped <span> for <Link> below */}
         <p className="mt-6 text-center text-sm text-slate-500">
           Don't have an account?{' '}
           <Link 

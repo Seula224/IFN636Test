@@ -5,9 +5,17 @@ import TaskList from '../components/TaskList';
 import { useAuth } from '../context/AuthContext';
 
 const Tasks = () => {
-  const { user } = useAuth();
+  const { user } = useAuth(); 
   const [tasks, setTasks] = useState([]);
   const [editingTask, setEditingTask] = useState(null);
+
+  /* 🛡️ THE SUPER SAFE ID CHECK:
+     This checks the AuthContext 'user' first, then 'userId', then 'id', 
+     and finally checks the browser's localStorage. */
+  const loggedInUserId = user?._id || user?.id || user?.userId || localStorage.getItem('userId');
+
+  // This log will tell you IMMEDIATELY in the F12 console if you are "someone" or "null"
+  console.log("Current Logged In User ID:", loggedInUserId);
 
   const fetchTasks = useCallback(async () => {
     try {
