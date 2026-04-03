@@ -48,5 +48,5 @@ jobs:
         # This will run every .test.js file in your backend folder
         run: cd backend && npm test
         env:
-          MONGO_URI: ${{ secrets.URI }}
-          JWT_SECRET: ${{ secrets.JWT }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
