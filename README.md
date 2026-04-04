@@ -1,36 +1,42 @@
-**Task Manager Application Overview:The task manager application is designed to help users efficiently manage their tasks and responsibilities by providing a user-friendly interface for creating, viewing, updating, and deleting tasks. It includes essential features such as secure user authentication, allowing individuals to sign up and log in to their accounts, as well as profile management to update personal information. With built-in validation such as input field validation and email validation, the application ensures a seamless user experience while enhancing productivity and organization in both personal and professional settings. **
+# 🏛️ IFN636: Online Debate Platform
+[![CI/CD Pipeline](https://github.com/Seula224/IFN636Test/actions/workflows/IFN636Seula.yml/badge.svg)](https://github.com/Seula224/IFN636Test/actions/workflows/IFN636Seula.yml)
 
-**This apps **contain** the following features:**
+## 📋 Project Overview
+A full-stack CRUD application developed for **IFN636 Software Life Cycle Management**. This platform allows users to manage debate topics through a secure, automated lifecycle deployed on AWS.
 
-* Signup
-* Login
-* Logout
-* Update profile
-* Add Topic
-* View Topic
-* Update Topic
-* Delete Topic
-
-* editing topics only possible by the owner of topics.
-
-**This **app**lication** is**almost **a** precompiled** app**. However, students will develop some features,**such as adding tasks, viewing tasks, updating tasks, and **deleting** tasks**. **Students** will interact with GitHub when they develop the features.**
+### 🛠️ Tech Stack
+* **Frontend:** React.js
+* **Backend:** Node.js / Express
+* **Database:** MongoDB 
+* **Reverse Proxy:** Nginx
+* **Process Manager:** PM2
 
 ---
 
-**Prerequisite:** Please install the following software and create account in following web tools** **
+## 🚀 CI/CD & Deployment
+This project utilizes a **Self-Hosted GitHub Actions Runner** on an AWS EC2 instance. 
 
-* **Nodejs [**[https://nodejs.org/en](https://nodejs.org/en)]** **
-* **Git [**[https://git-scm.com/](https://git-scm.com/)]** **
-* **VS code editor** [[https://code.visualstudio.com/](https://code.visualstudio.com/)]** **
-* **MongoDB Account** [[https://account.mongodb.com/account/login](https://account.mongodb.com/account/login)]** - In tutorial, we have also showed how can you create account and database: follow step number 2.**
-* **GitHub Account** [[https://github.com/signup?source=login](https://github.com/signup?source=login)]** **
+### Automation Workflow:
+1. **Build:** Installs dependencies and generates the React production build.
+2. **Environment:** Dynamically creates the `.env` file using the `PROD` GitHub Secret.
+3. **QA:** Executes **31 automated integration tests** (Mocha/Supertest).
+4. **Deploy:** Uses PM2 to restart services for zero-downtime updates.
 
 ---
 
-**fundenmental folders/files explanation.**
+## 🧪 Testing Status
+* ✅ **User Auth:** Registration & Login logic.
+* ✅ **CRUD Logic:** Create, Read, Update, and Delete validations.
+* ✅ **Security:** Ownership verification and token integrity.
+* **Results:** `31 passing`
 
-* .env                                - checking mongodb
-* /backend/test/                      - test files (for local)
-* /backend/controllers                - authentication/task control
-* /frontend $ Readme.md               - should be deleted/modified
-* /frontend/src $ axioConfig.jsx      - Ip address change here
+---
+
+## 🔗 Live Access
+* **Public URL:** [http://3.107.204.217:3000](http://3.107.204.217:3000)
+* **Instance ID:** `i-077d39f508add1c96` (Seula Koo)
+
+
+
+## 👤 Author
+**Seula Koo** | Student ID: **n11797231** | QUT 2026

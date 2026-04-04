@@ -3,7 +3,7 @@ import axios from 'axios';
 // 1. Create the instance
 const axiosInstance = axios.create({
  // baseURL: 'http://localhost:5001',
-  baseURL: 'http://3.27.144.30:5001',
+  baseURL: 'http://3.107.204.217:5001',
   headers: { 'Content-Type': 'application/json' },
 });
 
