@@ -38,3 +38,21 @@ This project utilizes a **Self-Hosted GitHub Actions Runner** on an AWS EC2 inst
 
 ## 👤 Author
 **Seula Koo** | Student ID: **n11797231** | QUT 2026
+
+---
+
+## 🛠️ Technical Case Study: Frontend Connectivity Migration
+
+When the AWS Public IP changed to 3.107.204.217, the existing production build of the frontend became "stale," as it was still attempting to communicate with the legacy API endpoint. To resolve this environment mismatch, I performed the following three-step migration:
+
+1. **Configuration Update:** I modified frontend/src/axiosConfig.jsx to point to the new Public IP and Backend Port (5001).
+2. **Production Re-build:** Since React is a compiled library, simply saving the .jsx file does not update the live site. I executed npm run build within the frontend directory to "bake" the new IP into the static production assets.
+3. **Process Refresh:** Finally, I utilized pm2 restart debate-frontend to ensure the process manager was serving the newly generated build folder.
+
+This process was critical in maintaining Environment Parity—ensuring the frontend and backend were perfectly aligned in the new production context.
+
+---
+
+## Test Credential (users)
+1. **email:** seula224@gmail.com |   test1@test.com
+2. **pass:**  test               |   test
